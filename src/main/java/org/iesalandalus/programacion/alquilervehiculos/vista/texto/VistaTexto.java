@@ -350,6 +350,28 @@ public class VistaTexto extends Vista
 	 *  utilizando el método obtenerEstadisticasMensualesTipoVehiculo en el controlador.
 	 * Luego, se muestra por pantalla cada tipo de vehículo y la cantidad de veces que ha sido alquilado en el mes indicado.
 	*/
+	
+	
+	public void mostrarEstadisticasMensualesTipoVehiculo() 
+	{
+	    Month mes = Consola.leerMes();
+	    EnumMap<TipoVehiculo, Integer> estadisticas = inicializarEstadisticas();
+
+	    if (estadisticas.isEmpty()) {
+	        System.out.println("ERROR: No hay estadísticas disponibles para el mes indicado.\n");
+	    } else {
+	        System.out.println("\nEstadísticas de alquiler de vehículos en el mes: " + mes);
+	        for (Map.Entry<TipoVehiculo, Integer> entry : estadisticas.entrySet()) {
+	            TipoVehiculo tipoVehiculo = entry.getKey();
+	            int cantidadAlquileres = entry.getValue();
+	            System.out.println(tipoVehiculo + ": " + cantidadAlquileres + " alquileres \n");
+	        }
+	    }
+	}
+
+
+	
+	/*
 	public void mostrarEstadisticasMensualesTipoVehiculo() 
 	{
 		Month mes = Consola.leerMes();
@@ -365,7 +387,9 @@ public class VistaTexto extends Vista
 				System.out.println(tipoVehiculo + ": " + cantidadAlquileres + " alquileres \n");
 			}
 		}
-	}
+	}*/
+	
+	
 
 
 }

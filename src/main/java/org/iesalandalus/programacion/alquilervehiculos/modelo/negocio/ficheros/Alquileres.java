@@ -120,7 +120,7 @@ public class Alquileres implements IAlquileres
 	private Alquiler elementToAlquiler(Element element) 
 	{
 		//Inicializamos variables. 
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATO_FECHA);
+	    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern(FORMATO_FECHA);
 	    Cliente cliente = null;
 	    Vehiculo vehiculo = null;
 	    
@@ -131,8 +131,8 @@ public class Alquileres implements IAlquileres
 	    String dniAtributo = alquilerDOM.getAttribute(DNI_CLIENTE);
 	    
 	    //asignación de elementos 
-	    Element fechaAlquiler = (Element) alquilerDOM.getElementsByTagName(FECHA_ALQUILER).item(0);
-	    Element fechaDevolucion = (Element) alquilerDOM.getElementsByTagName(FECHA_DEVOLUCION).item(0);
+	    NodeList fechaAlquiler = alquilerDOM.getElementsByTagName(FECHA_ALQUILER);
+	    NodeList fechaDevolucion = alquilerDOM.getElementsByTagName(FECHA_DEVOLUCION);
 
 	    List<Cliente> listaClientes = Clientes.getInstancia().get();
 	    Iterator<Cliente> clienteIterador = listaClientes.iterator();
@@ -154,11 +154,11 @@ public class Alquileres implements IAlquileres
 	        }
 	    }
 
-	    Alquiler alquiler = new Alquiler(cliente, vehiculo, LocalDate.parse(fechaAlquiler.getTextContent(), formatter));
+	    Alquiler alquiler = new Alquiler(cliente, vehiculo, LocalDate.parse(fechaAlquiler.item(0).getTextContent(), formatoFecha));
 
-	    if (fechaDevolucion.getTextContent() != null && !fechaDevolucion.getTextContent().isEmpty()) {
+	    if (fechaDevolucion.item(0).getTextContent() != null && !fechaDevolucion.item(0).getTextContent().isEmpty()) {
 	        try {
-	            alquiler.devolver(LocalDate.parse(fechaDevolucion.getTextContent(), formatter));
+	            alquiler.devolver(LocalDate.parse(fechaDevolucion.item(0).getTextContent(), formatoFecha));
 	        } catch (OperationNotSupportedException | DOMException e) {
 	            e.printStackTrace();
 	        }
@@ -209,15 +209,18 @@ public class Alquileres implements IAlquileres
 	private Element alquilerToElement(Document DOM, Alquiler alquiler) 
 	{
 		//inicialización de variables y formato. 
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATO_FECHA);
+	    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern(FORMATO_FECHA);
 	    LocalDate fechaAlquiler = alquiler.getFechaAlquiler();
-	    fechaAlquiler.format(formatter);
+	    String fechaAlquilerFormateada = fechaAlquiler.format(formatoFecha);
+	    
+	    
 	    LocalDate fechaDevolucion = alquiler.getFechaDevolucion();
+	    String fechaDevolucionFormateada = null;
 	    
 	    
 	    if (fechaDevolucion != null) 
 	    {
-	        fechaDevolucion.format(formatter);
+	        fechaDevolucionFormateada = fechaDevolucion.format(formatoFecha);
 	    }
 
 	    // Crear el elemento principal 'alquilerDOM' para representar el alquiler
@@ -231,7 +234,7 @@ public class Alquileres implements IAlquileres
 	    fechaAlquilerD.setAttribute(FORMATO, FORMATO_FECHA);
 	    fechaAlquilerD.setAttribute(TIPO_DATO, "LocalDate");
 	    // Establecer el contenido de texto con la fecha de alquiler en el elemento 'fechaAlquilerD'
-	    fechaAlquilerD.setTextContent(fechaAlquiler.toString());
+	    fechaAlquilerD.setTextContent(fechaAlquilerFormateada);
 
 	    // Agregar el elemento 'fechaAlquilerD' como hijo del elemento 'alquilerDOM'
 	    alquilerDOM.appendChild(fechaAlquilerD);
@@ -239,9 +242,10 @@ public class Alquileres implements IAlquileres
 	    // Crear el elemento 'fechaDevolucionD' para representar la fecha de devolución
 	    Element fechaDevolucionD = DOM.createElement(FECHA_DEVOLUCION);
 	    // Establecer el contenido de texto con la fecha de devolución (si está presente) en el elemento 'fechaDevolucionD'
-	    if (alquiler.getFechaDevolucion() != null) {
-	        fechaDevolucionD.setTextContent(fechaDevolucion.toString());
-	    } else {
+	    if (fechaDevolucion != null) {
+	        fechaDevolucionD.setTextContent(fechaDevolucionFormateada);
+	    } else 
+	    {
 	        fechaDevolucionD.setTextContent("");
 	    }
 
