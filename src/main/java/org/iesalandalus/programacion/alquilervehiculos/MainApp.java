@@ -18,8 +18,8 @@ import org.iesalandalus.programacion.alquilervehiculos.vista.texto.VistaTexto;
 public class MainApp {
 
 	public static void main(String[] args) {
-		ModeloCascada modelo = new ModeloCascada(FactoriaFuenteDatos.FICHEROS);
-		VistaTexto vista = new VistaTexto();
+		Modelo modelo = new ModeloCascada(FactoriaFuenteDatos.FICHEROS);
+		Vista vista = new VistaTexto();
 		Controlador controlador = new Controlador(modelo, vista);
 		controlador.comenzar();
 		controlador.terminar();

@@ -47,10 +47,11 @@ public class Turismo extends Vehiculo
 		
 		return cilindrada/FACTOR_CILINDRADA;
 	}
-	
+	/*
 	public static Vehiculo getVehiculoConMatricula(String matricula) {
 	    return new Turismo("Seat", "Cordoba", 1900, matricula);
 	}
+	*/
 
 
 	@Override
